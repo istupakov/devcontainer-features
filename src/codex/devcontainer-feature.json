@@ -1,0 +1,23 @@
+{
+    "id": "codex",
+    "version": "1.0.0",
+    "name": "Codex",
+    "description": "Use the Codex VS Code extension with your host Codex configuration and state.",
+    "mounts": [
+        {
+            "source": "${localEnv:HOME}/.codex",
+            "target": "/codex",
+            "type": "bind"
+        }
+    ],
+    "containerEnv": {
+        "CODEX_HOME": "/codex"
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "openai.chatgpt"
+            ]
+        }
+    }
+}

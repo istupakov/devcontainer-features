@@ -1,7 +1,13 @@
-name: "Validate devcontainer-feature.json files"
+name: "Validate Codex Feature"
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
   pull_request:
+
+permissions:
+  contents: read
 
 jobs:
   validate:
@@ -9,8 +15,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: "Validate devcontainer-feature.json files"
+      - name: Validate Feature metadata
         uses: devcontainers/action@v1
         with:
           validate-only: "true"
           base-path-to-features: "./src"
+
+      - name: Check extension declaration and shell syntax
+        run: |
+          python3 - <<'PYTHON'
+          import json
+          from pathlib import Path
+          feature = json.loads(Path("src/codex/devcontainer-feature.json").read_text())
+          assert feature["customizations"]["vscode"]["extensions"] == ["openai.chatgpt"]
+          PYTHON
+          sh -n src/codex/install.sh
+          for script in test/run.sh test/codex/*.sh; do
+            bash -n "$script"
+          done

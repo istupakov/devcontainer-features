@@ -1,0 +1,16 @@
+{
+    "vscode": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "remoteUser": "vscode",
+        "features": {
+            "codex": {}
+        }
+    },
+    "node": {
+        "image": "node:22-bookworm-slim",
+        "remoteUser": "node",
+        "features": {
+            "codex": {}
+        }
+    }
+}
