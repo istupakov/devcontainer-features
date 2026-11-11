@@ -11,12 +11,10 @@ Share host Codex configuration and state, with optional VS Code extension instal
 }
 ```
 
-
-
 ## Options
 
 | Options Id | Description | Type | Default Value |
-|------------|-------------|------|---------------|
+|-----|-----|-----|-----|
 | installExtension | Install the Codex VS Code extension when VS Code attaches. Disabled by default for Agent Host. | boolean | false |
 
 ## Host setup
@@ -97,6 +95,7 @@ Change the Feature reference from `:1` to `:2` and rebuild the container.
 Version 2 disables automatic extension installation by default. Set
 `installExtension` to `true` to keep installing the extension. The host directory
 mount and shared Codex state are unchanged.
+
 
 ---
 
