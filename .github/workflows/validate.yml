@@ -21,15 +21,21 @@ jobs:
           validate-only: "true"
           base-path-to-features: "./src"
 
-      - name: Check extension declaration and shell syntax
+      - name: Check extension option and shell syntax
         run: |
           python3 - <<'PYTHON'
           import json
           from pathlib import Path
           feature = json.loads(Path("src/codex/devcontainer-feature.json").read_text())
-          assert feature["customizations"]["vscode"]["extensions"] == ["openai.chatgpt"]
+          assert feature["options"]["installExtension"]["default"] is False
+          assert "customizations" not in feature
+          assert feature["postAttachCommand"] == "/usr/local/bin/codex-devcontainer-install-extension"
           PYTHON
           sh -n src/codex/install.sh
+          sh -n src/codex/install-extension.sh
           for script in test/run.sh test/codex/*.sh; do
             bash -n "$script"
           done
+
+      - name: Test optional extension installation
+        run: python3 test/extension_test.py

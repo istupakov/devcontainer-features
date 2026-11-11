@@ -1,23 +1,23 @@
 
 # Codex (codex)
 
-Use the Codex VS Code extension with your host Codex configuration and state.
+Share host Codex configuration and state, with optional VS Code extension installation.
 
 ## Example Usage
 
 ```json
 "features": {
-    "ghcr.io/istupakov/devcontainer-features/codex:1": {}
+    "ghcr.io/istupakov/devcontainer-features/codex:2": {}
 }
 ```
 
 
 
-## Customizations
+## Options
 
-### VS Code Extensions
-
-- `openai.chatgpt`
+| Options Id | Description | Type | Default Value |
+|------------|-------------|------|---------------|
+| installExtension | Install the Codex VS Code extension when VS Code attaches. Disabled by default for Agent Host. | boolean | false |
 
 ## Host setup
 
@@ -46,12 +46,57 @@ are not supported by this host bind-mount setup.
 
 ## VS Code extension
 
-Dev Containers installs `openai.chatgpt` when VS Code attaches to the container.
-The Feature does not install a standalone Codex CLI or require Node.js.
+The extension is not installed by default. The Feature does not install a
+standalone Codex CLI or require Node.js.
+
+### Choose whether to install the VS Code extension
+
+Set `installExtension` to `true` to install `openai.chatgpt` on attachment.
+This works in VS Code user settings with
+`dev.containers.defaultFeatures`:
+
+```json
+{
+    "dev.containers.defaultFeatures": {
+        "ghcr.io/istupakov/devcontainer-features/codex:2": {
+            "installExtension": true
+        }
+    }
+}
+```
+
+The same option works in a project's `devcontainer.json`:
+
+```json
+{
+    "features": {
+        "ghcr.io/istupakov/devcontainer-features/codex:2": {
+            "installExtension": true
+        }
+    }
+}
+```
+
+Rebuild the container after changing the option. Omit it or set it to `false`
+to skip extension installation. Setting it to `false` does not uninstall an existing
+extension or prevent installation requested by other VS Code settings.
+Host Codex configuration, authentication files, and session state remain shared
+with either choice.
+
+Installation runs as the remote user in `postAttachCommand`, using `code` or
+`code-insiders`. Without either CLI, the hook reports that installation was
+skipped. Installation failures from an available CLI are reported as hook
+failures and retried on the next attachment.
 
 See the [Codex IDE documentation](https://learn.chatgpt.com/docs/codex/ide) and
 [Codex state directory documentation](https://learn.chatgpt.com/docs/config-file/config-advanced).
 
+## Upgrade from version 1
+
+Change the Feature reference from `:1` to `:2` and rebuild the container.
+Version 2 disables automatic extension installation by default. Set
+`installExtension` to `true` to keep installing the extension. The host directory
+mount and shared Codex state are unchanged.
 
 ---
 

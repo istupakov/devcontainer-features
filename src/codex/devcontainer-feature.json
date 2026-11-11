@@ -1,8 +1,8 @@
 {
     "id": "codex",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "name": "Codex",
-    "description": "Use the Codex VS Code extension with your host Codex configuration and state.",
+    "description": "Share host Codex configuration and state, with optional VS Code extension installation.",
     "mounts": [
         {
             "source": "${localEnv:HOME}/.codex",
@@ -13,11 +13,12 @@
     "containerEnv": {
         "CODEX_HOME": "/codex"
     },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "openai.chatgpt"
-            ]
+    "options": {
+        "installExtension": {
+            "type": "boolean",
+            "default": false,
+            "description": "Install the Codex VS Code extension when VS Code attaches. Disabled by default for Agent Host."
         }
-    }
+    },
+    "postAttachCommand": "/usr/local/bin/codex-devcontainer-install-extension"
 }
